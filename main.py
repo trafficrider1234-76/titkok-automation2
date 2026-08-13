@@ -1,11 +1,7 @@
 import os
 import requests
 from groq import Groq
-
-# Naya MoviePy import tarika (Error fix karne ke liye)
-from moviepy.video.io.VideoFileClip import VideoFileClip
-from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
-from moviepy.video.VideoClip import TextClip
+from moviepy.editor import TextClip, CompositeVideoClip, VideoFileClip
 
 # Direct API keys
 GROQ_KEY = os.environ.get("GROQ_API_KEY")
@@ -48,8 +44,8 @@ else:
 
 print("3. MoviePy se text overlay render ho raha hai...")
 background = VideoFileClip("background_video.mp4").subclip(0, 10)
-txt_clip = TextClip(f"Restoring {search_keyword}", fontsize=45, color='white', size=background.size, method='caption')
-txt_clip = txt_clip.set_duration(10)
+txt_clip = TextClip(f"Restoring {search_keyword}", fontsize=45, color='white')
+txt_clip = txt_clip.set_position('center').set_duration(10)
 video = CompositeVideoClip([background, txt_clip])
 video.write_videofile("output.mp4", fps=24, codec="libx264", audio_codec="aac")
 print("Video render hokar 'output.mp4' ban gayi.")
