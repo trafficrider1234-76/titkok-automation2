@@ -1,0 +1,32 @@
+name: Auto TikTok Video Generator
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # Roz subah 9 UTC par chalega
+  workflow_dispatch:      # Manual run ke liye
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+        sudo apt-get install -y ffmpeg
+
+    - name: Run Script
+      env:
+        GROQ_API_KEY: "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"
+        PEXELS_API_KEY: "zHuyNBqP7ZEJPf9qUQxJiONAafba9YL01J6b0Xfzd4H26D9EOYN8AJPm"
+        TIKTOK_CLIENT_KEY: "aw5h7r3nbzc9pmb7"
+        TIKTOK_CLIENT_SECRET: "qfaaikcHvNnATYKHUOROYxyXD5rI60K8"
+      run: |
+        python main.py
