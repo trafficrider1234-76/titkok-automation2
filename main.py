@@ -1,9 +1,13 @@
 import os
 import requests
 from groq import Groq
-from moviepy.editor import TextClip, CompositeVideoClip, VideoFileClip
 
-# Direct API keys jo aapne di hain
+# Naya MoviePy import tarika (Error fix karne ke liye)
+from moviepy.video.io.VideoFileClip import VideoFileClip
+from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
+from moviepy.video.VideoClip import TextClip
+
+# Direct API keys
 GROQ_KEY = os.environ.get("GROQ_API_KEY")
 PEXELS_KEY = os.environ.get("PEXELS_API_KEY")
 TIKTOK_KEY = os.environ.get("TIKTOK_CLIENT_KEY")
@@ -50,6 +54,4 @@ video = CompositeVideoClip([background, txt_clip])
 video.write_videofile("output.mp4", fps=24, codec="libx264", audio_codec="aac")
 print("Video render hokar 'output.mp4' ban gayi.")
 
-print("4. TikTok posting initialization step...")
-# TikTok Content Posting API ke zariye direct post ya upload ke liye yahan request configure ki jati hai.
 print("Automation process completed successfully.")
