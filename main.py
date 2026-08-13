@@ -1,7 +1,7 @@
 import os
 import requests
 from groq import Groq
-from moviepy.editor import TextClip, CompositeVideoClip, VideoFileClip
+import subprocess
 
 # Direct API keys
 GROQ_KEY = os.environ.get("GROQ_API_KEY")
@@ -42,12 +42,15 @@ if "videos" in data and len(data["videos"]) > 0:
 else:
     raise Exception("Pexels par video nahi mili.")
 
-print("3. MoviePy se text overlay render ho raha hai...")
-background = VideoFileClip("background_video.mp4").subclip(0, 10)
-txt_clip = TextClip(f"Restoring {search_keyword}", fontsize=45, color='white')
-txt_clip = txt_clip.set_position('center').set_duration(10)
-video = CompositeVideoClip([background, txt_clip])
-video.write_videofile("output.mp4", fps=24, codec="libx264", audio_codec="aac")
+print("3. FFmpeg ke zariye video par text overlay render ho raha hai...")
+text_overlay = f"Restoring {search_keyword}"
+ffmpeg_command = [
+    "ffmpeg", "-y", "-i", "background_video.mp4",
+    "-vf", f"drawtext=text='{text_overlay}':fontcolor=white:fontsize=48:x=(w-text_w)/2:y=50:box=1:boxcolor=black@0.5:boxborderw=5",
+    "-t", "10", "-codec:v", "libx264", "-codec:a", "aac", "output.mp4"
+]
+
+subprocess.run(ffmpeg_command, check=True)
 print("Video render hokar 'output.mp4' ban gayi.")
 
 print("Automation process completed successfully.")
